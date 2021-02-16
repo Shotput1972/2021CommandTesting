@@ -4,21 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.MotorSpeeds;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ComboShooter;
 
-public class IntakeBall extends CommandBase {
-  private Intake intake;
-  Timer timer;
-  /** Creates a new IntakeBall. */
-  public IntakeBall(Intake i) {
-    intake = i;
-    addRequirements(intake);
-    timer = new Timer();
-
+public class ShootSequence extends CommandBase {
+  private ComboShooter comboShooter;
+  /** Creates a new ShootSequence. */
+  public ShootSequence(ComboShooter cs) {
+    comboShooter = cs;
+    addRequirements(comboShooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,18 +24,13 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    timer.reset();
-    timer.start();
-    while(timer.get()>AutoConstants.INTAKEDELAY);
-    {
-      intake.intakeBall(MotorSpeeds.INTAKESPEED);
-    }
+    comboShooter.shootSequence(MotorSpeeds.ELEVATOR_SPEED, MotorSpeeds.SHOOTERSPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop();
+    comboShooter.stop();
   }
 
   // Returns true when the command should end.

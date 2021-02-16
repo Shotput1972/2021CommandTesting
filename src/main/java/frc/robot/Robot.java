@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.*;
 //import edu.wpi.cscore.UsbCamera;
 //import edu.wpi.cscore.MjpegServer;
@@ -29,10 +30,12 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private DigitalInput topSensor = new DigitalInput(0); 
-  private DigitalInput bottomSensor = new DigitalInput(1);
+  private DigitalInput sensor0 = new DigitalInput(0); 
+  private DigitalInput sensor1 = new DigitalInput(1);
   //private Elevator elevator = new Elevator();
   //private ElevateBall elevateBall = new ElevateBall();
+  UsbCamera camera1;
+  UsbCamera camera2;
   
 
 
@@ -45,7 +48,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    CameraServer.getInstance().startAutomaticCapture();
+    camera1 = CameraServer.getInstance().startAutomaticCapture(0);
+    camera2 = CameraServer.getInstance().startAutomaticCapture(1);
   }
 
   /**
@@ -100,8 +104,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putBoolean("TopSensor", topSensor.get());
-    SmartDashboard.putBoolean("BottomSensor", bottomSensor.get());
+    SmartDashboard.putBoolean("sensor1", sensor1.get());
+    SmartDashboard.putBoolean("sensor0", sensor0.get());
     
   /*  if (topSensor.get()) {
       if(! bottomSensor.get()) {

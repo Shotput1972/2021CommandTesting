@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
     public final class OPSCONTROL{
-        public static final int OPSControl = 0; //Logitech Extreme 3D
+        public static final int OPSControl = 0; //Logitech Controller Pad
         //Controller Axes
         public static final int LEFT_Y_AXIS = 1; 
         public static final int LEFT_X_AXIS = 0; 
@@ -71,11 +71,12 @@ public final class Constants {
     public final class AutoConstants{
         public static final double DRIVETIME = 4.5;
         public static final double AUTOSPEED = .4;
+        public static final double INTAKEDELAY = .75;
     }
     public final class MotorSpeeds{
-        public static final double DRIVESPEED = .8;
+        public static final double DRIVESPEED = .6;
 		public static final double SHOOTERSPEED = 1.0;
-		public static final double INTAKESPEED = .6;
+		public static final double INTAKESPEED = .8;
 		public static final double TURRETSPEED = -.4;
         public static final double ELEVATOR_SPEED = .6;
 	    public static final double HOPPER_SPEED = .7;
