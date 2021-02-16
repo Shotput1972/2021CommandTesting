@@ -5,15 +5,19 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorControllers;
+import frc.robot.Constants.MotorSpeeds;
 
 public class Elevator extends SubsystemBase {
   WPI_VictorSPX elevator1 = new WPI_VictorSPX(MotorControllers.ELEVATOR_1);
   WPI_VictorSPX elevator2 = new WPI_VictorSPX(MotorControllers.ELEVATOR_2);
   SpeedControllerGroup elevatorGroup = new SpeedControllerGroup(elevator1, elevator2);
+  private DigitalInput sensor0 = new DigitalInput(0); 
+  private DigitalInput sensor1 = new DigitalInput(1);
+
   /** Creates a new Elevator. */
   public Elevator() {
     elevator2.setInverted(true);
@@ -21,6 +25,7 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     // This method will be called once per scheduler run
   }
   public void elevateBall(double speed) {
@@ -28,6 +33,14 @@ public class Elevator extends SubsystemBase {
   }
   public void lowerBall(double speed) {
     elevatorGroup.set(speed);
+  }
+  public void moveElevator(double speed) {
+    if (sensor1.get()) {
+      if(! sensor0.get()) {
+        elevatorGroup.set(MotorSpeeds.ELEVATOR_SPEED);
+        System.out.println("I'm working!!");
+    }
+   }
   }
   public void stop() {
     elevatorGroup.set(0);

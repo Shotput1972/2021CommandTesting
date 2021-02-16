@@ -17,11 +17,11 @@ import frc.robot.commands.GrabHatch;
 import frc.robot.commands.HopperSpin;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.LowerBall;
+import frc.robot.commands.MoveElevator;
 import frc.robot.commands.RetractHatch;
 import frc.robot.commands.ShootBall;
 import frc.robot.commands.TurretLeft;
 import frc.robot.commands.TurretRight;
-//import frc.robot.commands.TurretTurn;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Hopper;
@@ -30,6 +30,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.commands.ComboIntake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -41,7 +42,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-    private final DriveTrain driveTrain;
+  private final DriveTrain driveTrain;
   private final DriveWithJoysticks driveWithJoysticks;
   private final DriveForwardTimed driveForwardTimed;
   public static Joystick driverJoystick, opsControl;
@@ -49,6 +50,7 @@ public class RobotContainer {
   private final ShootBall shootBall;
   private final Elevator elevator;
   private final ElevateBall elevateBall;
+  private final MoveElevator moveElevator;
   private final LowerBall lowerBall;
   private final Intake intake;
   private final IntakeBall intakeBall;
@@ -61,9 +63,9 @@ public class RobotContainer {
   private final GrabHatch grabHatch;
   private final AlignTurret alignTurret;
   private final Limelight limelight;
-  //private final TurretTurn turretTurn;
+  private final ComboIntake comboIntake;
   private final RetractHatch retractHatch;
-
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     driveTrain = new DriveTrain();
@@ -81,10 +83,13 @@ public class RobotContainer {
     shootBall.addRequirements(shooter);
 
     elevator = new Elevator();
+    moveElevator = new MoveElevator(elevator);
+    elevator.setDefaultCommand(moveElevator);
     elevateBall = new ElevateBall(elevator);
     elevateBall.addRequirements(elevator);
     lowerBall = new LowerBall(elevator);
     lowerBall.addRequirements(elevator);
+    
 
     intake = new Intake();
     intakeBall = new IntakeBall(intake);
@@ -102,17 +107,15 @@ public class RobotContainer {
     turretLeft.addRequirements(turret);
     alignTurret = new AlignTurret(turret, limelight);
     alignTurret.addRequirements(turret, limelight);
-    /*turretTurn = new TurretTurn(turret);
-    turretTurn.addRequirements(turret);
-    turret.setDefaultCommand(turretTurn); */
-
-
+        
     pneumatics = new Pneumatics();
     grabHatch = new GrabHatch(pneumatics);
     grabHatch.addRequirements(pneumatics);
     retractHatch = new RetractHatch(pneumatics);
     retractHatch.addRequirements(pneumatics);
 
+    comboIntake = new ComboIntake(pneumatics, intake);
+    comboIntake.addRequirements(pneumatics, intake);
 
     
     // Configure the button bindings
@@ -135,6 +138,11 @@ public class RobotContainer {
     extendIntakeButton.whenPressed(new GrabHatch(pneumatics));
     JoystickButton retractIntakeButton = new JoystickButton(driverJoystick, DriverJoystick.A_BUTTON);
     retractIntakeButton.whenPressed(new RetractHatch(pneumatics));
+    JoystickButton comboIntakeButton = new JoystickButton(driverJoystick, DriverJoystick.X_BUTTON);
+    comboIntakeButton.whileHeld(new ComboIntake(pneumatics,intake));
+    JoystickButton releaseIntakeButton = new JoystickButton(driverJoystick, DriverJoystick.X_BUTTON);
+    releaseIntakeButton.whenReleased(new RetractHatch(pneumatics));
+
 
     //Operator Button Bindings
     JoystickButton shootButton = new JoystickButton(opsControl, OPSCONTROL.RT_BUMPER);

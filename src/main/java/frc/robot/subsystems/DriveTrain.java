@@ -21,6 +21,7 @@ public class DriveTrain extends SubsystemBase {
   SpeedControllerGroup leftMotors;
   SpeedControllerGroup rightMotors;
   DifferentialDrive drive;
+  
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
@@ -45,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
 
   public void driveWithJoysticks(Joystick joystick,double speed)
   {
-    drive.arcadeDrive(joystick.getRawAxis(DriverJoystick.LEFT_Y_AXIS)*speed, 
+    drive.arcadeDrive(joystick.getRawAxis(DriverJoystick.LEFT_Y_AXIS)*speed * -1, 
     joystick.getRawAxis(DriverJoystick.LEFT_X_AXIS)*.625*speed);
   }
 
